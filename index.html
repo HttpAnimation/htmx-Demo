@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>htmx Demo</title>
+  <style>
+    body {
+      background-color: #282c34;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #1f2227;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background-color: #61dafb;
+      color: #282c34;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #5ac3dd;
+    }
+
+    .dark-mode {
+      filter: invert(1);
+    }
+  </style>
+  <script src="https://unpkg.com/htmx.org@latest"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      htmx.defineExtension("dark-mode", {
+        onEvent: function (name, evt) {
+          if (name === "htmx:afterSwap") {
+            var target = evt.detail.target;
+            if (target.classList.contains("dark-mode")) {
+              document.body.classList.add("dark-mode");
+            } else {
+              document.body.classList.remove("dark-mode");
+            }
+          }
+        },
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>htmx Demo</h1>
+
+    <button hx-get="/api/data" class="button">Load Data</button>
+
+    <div hx-target="#dataContainer" hx-swap="outerHTML">
+      <p>Loading data...</p>
+    </div>
+
+    <div id="dataContainer"></div>
+
+    <label>
+      <input type="checkbox" hx-ext="dark-mode" checked> Dark Mode
+    </label>
+  </div>
+</body>
+
+</html>
